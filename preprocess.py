@@ -57,6 +57,7 @@ def dedup(people):
     return ans
 
 def main(paths, output_filename):
+    paths=glob.glob(paths)
     all_people = [p for path in paths for p in load_pkl(path) if p["title"] not in titles_to_ignore]
     people = dedup_middle(dedup(all_people))
     print(f"{len(people):,}/{len(all_people):,} 'different' name+titles ({len(people)/len(all_people):.1%})")

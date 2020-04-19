@@ -31,7 +31,7 @@ parser.add_argument("-o", "--output", dest="output",
 
 parser.add_argument("-r", "--retries", dest="retries", type=int, default=2, help="number of retries per path")
 
-parser.add_argument("-p", "--parallel", dest="parallel", type=int, default=0,
+parser.add_argument("-p", "--parallel", dest="parallel", type=int, default=64,
                     help="number of parallel threads", metavar="N")
 
 args = parser.parse_args()
@@ -177,7 +177,14 @@ def bios_from_wet_url(url, verbose=False):
         time0 = time.time()
         log("TRYING "+url)
         r = requests.get(url, stream=True)
+        count=10
+        while(count>0 and r.status_code != 200):
+            r = requests.get(url, stream=True)
+            count=count-1
+            print(count)
 
+
+        
         assert r.status_code == 200, f"*** Got status code {r.status_code} != 200"
 
         if verbose:
